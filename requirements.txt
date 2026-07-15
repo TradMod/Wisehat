@@ -1,0 +1,58 @@
+# LangChain
+langchain
+langchain-core
+langchain-community
+
+# LLM Providers
+langchain-openai
+langchain-google-genai
+langchain-mistralai
+
+# OpenAI-compatible client (also works with OpenCode GO)
+openai
+
+# Environment variables
+python-dotenv
+
+# HTTP
+httpx
+requests
+
+# Data validation
+pydantic
+
+# Token counting
+tiktoken
+
+# CLI & Logging
+typer
+rich
+loguru
+
+# Retry utilities
+tenacity
+
+# Fast JSON serialization
+orjson
+
+# Optional: Vector stores
+faiss-cpu
+chromadb
+
+# Optional: Embeddings
+sentence-transformers
+
+# Optional: Web scraping / parsing
+beautifulsoup4
+lxml
+
+# Optional: Web search
+duckduckgo-search
+
+# Optional: Progress bars
+tqdm
+
+# Optional: Notebook support
+ipykernel
+jupyter
+
