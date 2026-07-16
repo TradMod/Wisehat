@@ -9,10 +9,4 @@
  ▀███▀███▀  █▀    ▄████████▀    ██████████   ███    █▀      ███    █▀     ▄████▀  
 ```
 
-<div align="center">
-
-### Wisehat Helps Whitehats Hunt Wisely
-
-*AI-powered intelligence for bug bounty hunters.*
-
-</div>
+Wisehat Helps Whitehats Hunt Wisely: *AI-powered intelligence for bug bounty hunters.*
