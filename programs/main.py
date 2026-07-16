@@ -2,9 +2,20 @@ import os
 from dotenv import load_dotenv
 import langchain
 from langchain_openai import ChatOpenAI 
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
+from langchain_community.document_loaders import WebBaseLoader
+from immunefi_pageloader import immunefi_data
+from hackenproof_mcp import hackenproof_data
 load_dotenv()
+
+program_name_imu = input("IMU name: ")
+result_imu = immunefi_data(program_name_imu)
+print(result_imu)
+
+program_name_hp = input("HP name: ")
+result_hp = hackenproof_data(program_name_hp)
+print(result_hp)
 
 llm = ChatOpenAI(
     model="glm-5.1",
@@ -49,16 +60,3 @@ while True:
     print(response.content)
     history.append(AIMessage(content=response.content))
 print(history)
-
-# prompt template which tells the system about flaggings
-# - import the model -
-# - basic ai model chat -
-# - add a template with a system prompt -
-# - take user input -
-# - full prompt to the model and fetch the response -
-
-# website page loader and input to the prompt
-# -
- 
-# memory of the chat 
-# - 

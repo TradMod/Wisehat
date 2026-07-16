@@ -56,3 +56,4 @@ tqdm
 ipykernel
 jupyter
 
+# playwright
