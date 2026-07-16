@@ -1,21 +1,11 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
-import langchain
 from langchain_openai import ChatOpenAI 
-from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_community.document_loaders import WebBaseLoader
+from langchain_core.prompts import ChatPromptTemplate
 from programs.immunefi_loader import immunefi_data
 from programs.hackenproof_mcp import hackenproof_data
 load_dotenv()
-
-program_name_imu = input("IMU name: ")
-result_imu = immunefi_data(program_name_imu)
-print(result_imu)
-
-program_name_hp = input("HP name: ")
-result_hp = hackenproof_data(program_name_hp)
-print(result_hp)
 
 llm = ChatOpenAI(
     model="glm-5.1",
@@ -24,39 +14,38 @@ llm = ChatOpenAI(
     temperature=0,
 )
 
-history = []
+SYSTEM_PROMPT = Path("prompts/system_prompt.md").read_text(encoding="utf-8")
 
 prompt = ChatPromptTemplate.from_messages([
     (
         "system",
-        """
-        You are an expert AI Bug Bounty Programs' Rules Expert.
-
-        Your responsibilities:
-        - Answer accurately and concisely.
-        """,
-    ),
-    MessagesPlaceholder(
-        "history"
+        SYSTEM_PROMPT,
     ),
     (
         "human",
         """
-        {user_input}
+        {llm_prompt}
         """,
     ),
 ])
 
-while True:
-    user_input = input("Input: ")
-    if user_input == "0":
-        break
+def main():
+    platform = input("BBP Platform: ")
+    program_name = input("BBP Program: ")
+    if platform == "Immunefi":
+        program_data = immunefi_data(program_name)
+    elif platform == "Hackenproof":
+        program_data = hackenproof_data(program_name)
+    else:
+        print(f"Unsupported Platform: {platform}")
+        return
+    
     formatted_prompt = prompt.invoke({
-    "history": history[-10:],    
-    "user_input": user_input
+    "llm_prompt": program_data
     })
+
     response = llm.invoke(formatted_prompt)
-    history.append(HumanMessage(content=user_input))
     print(response.content)
-    history.append(AIMessage(content=response.content))
-print(history)
+
+if __name__ == "__main__":
+    main()

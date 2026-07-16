@@ -11,11 +11,10 @@ prompt template which tells the system about flaggings
 
 phase 2 
 website page loader and input to the prompt
-- Website Page loader
-- website pages number check (immunefi & hackenproof)
-- take user input and based on that page search/fetch
-- add those page details into the prompt
-- 
+- Website Page loader -
+- website pages number check (immunefi & hackenproof) -
+- take user input and based on that page search/fetch -
+- add those page details into the prompt - 
  
 phase 3
 prepare the bbp rules analyzer template
