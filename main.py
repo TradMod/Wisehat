@@ -5,8 +5,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_community.document_loaders import WebBaseLoader
-from immunefi_pageloader import immunefi_data
-from hackenproof_mcp import hackenproof_data
+from programs.immunefi_loader import immunefi_data
+from programs.hackenproof_mcp import hackenproof_data
 load_dotenv()
 
 program_name_imu = input("IMU name: ")
