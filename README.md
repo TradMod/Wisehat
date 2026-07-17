@@ -67,7 +67,8 @@ Wisehat/
 │   ├── immunefi_loader.py      # Immunefi page loader + case-insensitive slug resolver
 │   └── hackenproof_mcp.py      # Hackenproof MCP (JSON-RPC) client
 ├── prompts/
-│   └── system_prompt.md        # WiseHat AI system prompt (analysis framework + rules)
+│   ├── system_prompt.md        # WiseHat AI system prompt (analysis framework + rules)
+│   └── SKILL.md                # Agent skill definition (bug-bounty-program-analysis)
 ├── .env.example                # Required environment variables
 └── requirements.txt            # Python dependencies
 ```
@@ -164,6 +165,22 @@ WiseHat follows a strict analyst mindset, enforced by the system prompt:
 - **Documented facts vs. WiseHat observations** — these are always distinguished, never blurred.
 - **No bad-faith accusations** — only practical consequences of wording are explained.
 - **Date agnosticism** — dates are reported as documented facts, never interpreted relative to "today" to infer whether a program is active/paused/expired.
+
+---
+
+## Agent Skill
+
+WiseHat's analysis framework is also packaged as a reusable agent skill in [`prompts/SKILL.md`](prompts/SKILL.md). It carries YAML frontmatter:
+
+```yaml
+name: bug-bounty-program-analysis
+description: Analyze Blockchain Bug Bounty Program documentation from the perspective
+  of an experienced security triager to produce researcher-focused intelligence reports.
+```
+
+This lets AI coding agents (such as opencode) load WiseHat's analysis workflow — the same expertise, core principles, section structure, and verdict scale that power the app — and apply it to any bug bounty documentation you provide directly (program pages, scope pages, PDFs, markdown, HTML, website extracts) across platforms beyond Immunefi and Hackenproof, including Cantina, Sherlock, and Code4rena.
+
+Use the skill when you already have the documentation in hand and want the WiseHat analysis without running the data loaders. Use the app (`app.py` / Streamlit UI) when you only have a program name and want WiseHat to fetch and analyze everything end-to-end.
 
 ---
 
