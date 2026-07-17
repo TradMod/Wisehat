@@ -10,6 +10,8 @@
 ```
 **Wisehat Helps Whitehats Hunt Wisely - AI-powered intelligence for bug bounty hunters.**
 
+> Try the live app: **https://wisehat-ai.streamlit.app/**
+
 ---
 
 WiseHat is an AI-powered intelligence tool that analyzes Blockchain Bug Bounty Programs (BBPs) and produces a structured, researcher-friendly report **before** you spend time hunting. Instead of reading pages of documentation, whitehats get an instant breakdown of the rules, risks, rewards, scope, and requirements that materially affect whether a valid vulnerability will actually be accepted, classified correctly, and rewarded.
@@ -100,6 +102,10 @@ cp .env.example .env
 ## Usage
 
 ### Web UI (Streamlit)
+
+**Live deployment:** https://wisehat-ai.streamlit.app/
+
+To run locally:
 
 ```bash
 streamlit run frontend/streamlit_app.py
