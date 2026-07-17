@@ -27,20 +27,29 @@ class WiseHatReport(BaseModel):
     hunter_tips: list[str]
     before_you_hunt_checklist: list[str]
 
-_OPENCODE_GO_API_KEY = os.getenv("OPENCODE_GO_API_KEY")
-if not _OPENCODE_GO_API_KEY:
-    raise RuntimeError(
-        "OPENCODE_GO_API_KEY not found. Set it in .env (local) or in "
-        "Streamlit Cloud Secrets (OPENCODE_GO_API_KEY)."
-    )
 
-llm = ChatOpenAI(
-    model="glm-5.2",
-    api_key=_OPENCODE_GO_API_KEY,
-    base_url="https://opencode.ai/zen/go/v1",
-    temperature=0,
-)
-structured_llm = llm.with_structured_output(WiseHatReport)
+_llm = None
+_structured_llm = None
+
+
+def _get_structured_llm():
+    global _llm, _structured_llm
+    if _structured_llm is None:
+        api_key = os.getenv("OPENCODE_GO_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "OPENCODE_GO_API_KEY not found. Set it in .env (local) or in "
+                "Streamlit Cloud Secrets (OPENCODE_GO_API_KEY)."
+            )
+        _llm = ChatOpenAI(
+            model="glm-5.2",
+            api_key=api_key,
+            base_url="https://opencode.ai/zen/go/v1",
+            temperature=0,
+        )
+        _structured_llm = _llm.with_structured_output(WiseHatReport)
+    return _structured_llm
+
 
 SYSTEM_PROMPT = Path("prompts/system_prompt.md").read_text(encoding="utf-8")
 
@@ -57,8 +66,6 @@ prompt = ChatPromptTemplate.from_messages([
     ),
 ])
 
-chain = prompt | structured_llm
-
 def generate_report(platform: str, program_name: str) -> WiseHatReport:
     if platform not in ("Immunefi", "Hackenproof"):
         raise ValueError(f"Unsupported Platform: {platform}")
@@ -70,6 +77,8 @@ def generate_report(platform: str, program_name: str) -> WiseHatReport:
         program_data = immunefi_data(program_name)
     elif platform == "Hackenproof":
         program_data = hackenproof_data(program_name)
+
+    structured_llm = _get_structured_llm()
 
     formatted_prompt = prompt.invoke({
         "llm_prompt": program_data

@@ -7,15 +7,24 @@ import streamlit as st
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
+_SECRETS_ERROR = None
 try:
     _secrets = st.secrets
     for _k in ("OPENCODE_GO_API_KEY", "HACKENPROOF_API_KEY"):
         if _k in _secrets:
             os.environ.setdefault(_k, str(_secrets[_k]))
-except Exception:
-    pass
+except Exception as _e:
+    _SECRETS_ERROR = _e
 
 from app import generate_report, WiseHatReport
+
+if _SECRETS_ERROR is not None and not os.getenv("OPENCODE_GO_API_KEY"):
+    st.error(
+        f"Failed to load Streamlit Secrets: `{type(_SECRETS_ERROR).__name__}: "
+        f"{_SECRETS_ERROR}`. Make sure OPENCODE_GO_API_KEY is set in your "
+        "Streamlit Cloud app Secrets (TOML format, top-level key)."
+    )
+    st.stop()
 
 
 def rating_color(rating: float) -> tuple[str, str, str]:
