@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.getenv("HACKENPROOF_API_KEY")
 MCP_URL = "https://mcp.hackenproof.com/mcp"
 
 
@@ -136,12 +135,21 @@ class HackenProofMCP:
         return content_text
 
 
-if not API_KEY:
-    raise ValueError("HACKENPROOF_API_KEY not found in .env")
+_client: HackenProofMCP | None = None
 
-# Create one client when this module is imported
-client = HackenProofMCP(API_KEY)
+
+def _get_client() -> HackenProofMCP:
+    global _client
+    if _client is None:
+        api_key = os.getenv("HACKENPROOF_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "HACKENPROOF_API_KEY not found. Set it in .env (local) or "
+                "in Streamlit Cloud Secrets (HACKENPROOF_API_KEY)."
+            )
+        _client = HackenProofMCP(api_key)
+    return _client
 
 
 def hackenproof_data(program_name: str):
-    return client.get_program_info(program_name)
+    return _get_client().get_program_info(program_name)

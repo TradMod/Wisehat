@@ -3,5 +3,4 @@ __pycache__/
 .venv/
 .DS_Store
 navich.py
-prompts/system_prompt.md
 rag/

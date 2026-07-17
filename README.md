@@ -161,17 +161,6 @@ WiseHat follows a strict analyst mindset, enforced by the system prompt:
 
 ---
 
-## Error Handling
-
-WiseHat validates inputs and program data **before** invoking the LLM, so no tokens are spent on invalid requests:
-
-- Unsupported platform or empty program name → `ValueError`.
-- Immunefi: HTTP pre-check on each page URL (404 → `ValueError`); empty content → `ValueError`; unknown slug → `ValueError` with a link to browse available programs.
-- Hackenproof: MCP HTTP errors, JSON-RPC `error` objects, malformed/empty responses → `ValueError`.
-- Immunefi program names are resolved **case-insensitively** (`Chainlink`, `chainlink`, `CHAINLINK` all resolve to the canonical slug `chainlink`).
-
----
-
 ## Tech Stack
 
 - **LangChain** — prompt templates + structured output
