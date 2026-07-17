@@ -8,9 +8,11 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
 try:
-    for _k, _v in st.secrets.items():
-        os.environ.setdefault(_k, str(_v))
-except st.errors.StreamlitAPIException:
+    _secrets = st.secrets
+    for _k in ("OPENCODE_GO_API_KEY", "HACKENPROOF_API_KEY"):
+        if _k in _secrets:
+            os.environ.setdefault(_k, str(_secrets[_k]))
+except Exception:
     pass
 
 from app import generate_report, WiseHatReport

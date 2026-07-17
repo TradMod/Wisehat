@@ -27,9 +27,16 @@ class WiseHatReport(BaseModel):
     hunter_tips: list[str]
     before_you_hunt_checklist: list[str]
 
+_OPENCODE_GO_API_KEY = os.getenv("OPENCODE_GO_API_KEY")
+if not _OPENCODE_GO_API_KEY:
+    raise RuntimeError(
+        "OPENCODE_GO_API_KEY not found. Set it in .env (local) or in "
+        "Streamlit Cloud Secrets (OPENCODE_GO_API_KEY)."
+    )
+
 llm = ChatOpenAI(
     model="glm-5.2",
-    api_key=os.getenv("OPENCODE_GO_API_KEY"),
+    api_key=_OPENCODE_GO_API_KEY,
     base_url="https://opencode.ai/zen/go/v1",
     temperature=0,
 )
