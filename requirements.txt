@@ -56,4 +56,7 @@ tqdm
 ipykernel
 jupyter
 
+# Streamlit frontend
+streamlit
+
 # playwright

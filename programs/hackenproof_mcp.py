@@ -73,6 +73,7 @@ class HackenProofMCP:
 
 
     def get_program_info(self, program_name: str):
+        program_name = program_name.strip()
         response = self.call_tool(
             "get_program_info",
             {
@@ -80,10 +81,59 @@ class HackenProofMCP:
             },
         )
 
-        data = response.text.split("data:", 1)[1].strip()
-        outer = json.loads(data)
+        if response.status_code != 200:
+            raise ValueError(
+                f"Hackenproof MCP request failed for '{program_name}' "
+                f"(HTTP {response.status_code}): {response.text[:200]}"
+            )
 
-        return outer["result"]["content"][0]["text"]
+        text = response.text
+        if "data:" not in text:
+            raise ValueError(
+                f"Unexpected Hackenproof MCP response for '{program_name}' "
+                f"(no data stream): {text[:200]}"
+            )
+
+        data = text.split("data:", 1)[1].strip()
+        try:
+            outer = json.loads(data)
+        except json.JSONDecodeError as e:
+            raise ValueError(
+                f"Malformed Hackenproof MCP response for '{program_name}': {data[:200]}"
+            ) from e
+
+        if isinstance(outer, dict) and outer.get("error"):
+            err = outer["error"]
+            msg = err.get("message", str(err)) if isinstance(err, dict) else str(err)
+            raise ValueError(
+                f"Program '{program_name}' not found on Hackenproof: {msg}"
+            )
+
+        try:
+            content_text = outer["result"]["content"][0]["text"]
+        except (KeyError, IndexError, TypeError) as e:
+            raise ValueError(
+                f"Malformed Hackenproof response for '{program_name}': {str(outer)[:200]}"
+            ) from e
+
+        if not isinstance(content_text, str) or not content_text.strip():
+            raise ValueError(
+                f"Program '{program_name}' returned empty content from Hackenproof"
+            )
+
+        lowered = content_text.strip().lower()
+        not_found_markers = (
+            "not found",
+            "does not exist",
+            "no such program",
+            "program not found",
+        )
+        if lowered.startswith(not_found_markers) or len(lowered) < 40 and any(m in lowered for m in not_found_markers):
+            raise ValueError(
+                f"Program '{program_name}' not found on Hackenproof: {content_text.strip()[:200]}"
+            )
+
+        return content_text
 
 
 if not API_KEY:
