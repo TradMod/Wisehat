@@ -43,7 +43,7 @@ def _get_structured_llm():
                 "Streamlit Cloud Secrets (OPENCODE_GO_API_KEY)."
             )
         _llm = ChatOpenAI(
-            model="kimi-k2.5",
+            model="kimi-k2.6",
             api_key=api_key,
             base_url="https://opencode.ai/zen/go/v1",
             temperature=0,
