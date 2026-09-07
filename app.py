@@ -1,4 +1,5 @@
 import os
+import uuid
 from pathlib import Path
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -46,6 +47,7 @@ def _get_structured_llm():
             api_key=api_key,
             base_url="https://opencode.ai/zen/go/v1",
             temperature=0,
+            default_headers={"x-opencode-session": uuid.uuid4().hex},
         )
         _structured_llm = _llm.with_structured_output(WiseHatReport)
     return _structured_llm
