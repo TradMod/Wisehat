@@ -35,21 +35,20 @@ _structured_llm = None
 def _get_structured_llm():
     global _llm, _structured_llm
     if _structured_llm is None:
-        api_key = os.getenv("OPENCODE_GO_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             raise RuntimeError(
-                "OPENCODE_GO_API_KEY not found. Set it in .env (local) or in "
-                "Streamlit Cloud Secrets (OPENCODE_GO_API_KEY)."
+                "GROQ_API_KEY not found. Set it in .env (local) or in "
+                "Streamlit Cloud Secrets (GROQ_API_KEY)."
             )
         _llm = ChatOpenAI(
-            model="glm-5.2",
+            model="moonshotai/kimi-k2-instruct-0905",
             api_key=api_key,
-            base_url="https://opencode.ai/zen/go/v1",
+            base_url="https://api.groq.com/openai/v1",
             temperature=0,
         )
         _structured_llm = _llm.with_structured_output(WiseHatReport)
     return _structured_llm
-
 
 SYSTEM_PROMPT = Path("prompts/system_prompt.md").read_text(encoding="utf-8")
 
