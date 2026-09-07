@@ -42,7 +42,7 @@ def _get_structured_llm():
                 "Streamlit Cloud Secrets (GROQ_API_KEY)."
             )
         _llm = ChatOpenAI(
-            model="qwen/qwen3.8-27b",
+            model="openai/gpt-oss-120b",
             api_key=api_key,
             base_url="https://api.groq.com/openai/v1",
             temperature=0,
