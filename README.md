@@ -95,7 +95,7 @@ cp .env.example .env
 
 | Variable | Required for | Description |
 |---|---|---|
-| `GROQ_API_KEY` | All reports | API key for the Groq LLM endpoint (Kimi K2). |
+| `GROQ_API_KEY` | All reports | API key for the Groq LLM endpoint (Qwen3 27B). |
 | `HACKENPROOF_API_KEY` | Hackenproof only | API key for the Hackenproof MCP. |
 
 ---
@@ -151,7 +151,7 @@ User input (platform + program name)
 
 1. The selected platform loader fetches the program's raw documentation.
 2. The documentation is injected into a chat prompt built from `prompts/system_prompt.md`.
-3. The LLM (`moonshotai/kimi-k2-instruct-0905` via Groq) produces a `WiseHatReport` using LangChain's structured output, guaranteed to match the pydantic schema.
+3. The LLM (`qwen/qwen3.8-27b` via Groq) produces a `WiseHatReport` using LangChain's structured output, guaranteed to match the pydantic schema.
 4. The report is rendered in the Streamlit UI (or printed as JSON in CLI mode).
 
 ---
@@ -187,7 +187,7 @@ Use the skill when you already have the documentation in hand and want the WiseH
 ## Tech Stack
 
 - **LangChain** — prompt templates + structured output
-- **Groq (Kimi K2)** — LLM via OpenAI-compatible API
+- **Groq (Qwen3 27B)** — LLM via OpenAI-compatible API
 - **Pydantic** — `WiseHatReport` structured schema
 - **Streamlit** — web frontend
 - **requests / WebBaseLoader** — program data fetching
